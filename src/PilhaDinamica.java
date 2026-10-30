@@ -1,26 +1,21 @@
 public class PilhaDinamica<T> implements StackADT<T> {
-    private No inicio;
-    private No fim;
+    private No<T> topo;
     private int tamanho;
 
     public PilhaDinamica(){
-        this.inicio = this.fim = null;
+        this.topo = null;
         this.tamanho = 0;
-    }
-
-    public No getFim() {
-        return fim;
     }
 
     @Override
     public boolean push(T elemento){
-        No novo = new No(elemento);
-        if(this.fim == null){
-            this.inicio = this.fim = novo;
+        No<T> novo = new No<T>(elemento);
+        if (isEmpty()){
+            this.topo = novo;
         } else {
-            this.fim.setProximo(novo);
-            novo.setAnterior(this.fim);
-            this.fim = novo;
+            topo.setProximo(novo);
+            novo.setAnterior(topo);
+            topo = novo;
         }
         this.tamanho++;
         return true;
@@ -29,32 +24,38 @@ public class PilhaDinamica<T> implements StackADT<T> {
     @Override
     public T pop(){
         if(isEmpty()){return null;}
-        T atendido = (T) this.fim.getElemento();
-        this.fim = this.fim.getAnterior();
-        this.fim.setProximo(null);
-        this.tamanho--;
-        return  atendido;
+        else {
+            T atendido = this.topo.getElemento();
+            this.topo = this.topo.getAnterior();
+            this.topo.setProximo(null);
+            this.tamanho--;
+            return atendido;
+        }
     }
 
     @Override
-    public T peek(){return (this.inicio == null) ? null : (T)this.inicio.getElemento();}
+    public T peek(){return (this.topo == null) ? null : this.topo.getElemento();}
 
-    @Override
-    public boolean isEmpty(){return this.inicio == null;}
+    public boolean isEmpty(){ return (this.tamanho == 0) ? true: false;}
 
     @Override
     public int size(){return this.tamanho;}
 
     @Override
     public void clear(){
-        this.inicio = this.fim = null;
+        if (isEmpty()){return;}
+        while(this.topo.getAnterior()!=null){
+            this.topo = this.topo.getAnterior();
+            this.topo.setProximo(null);
+        }
+        topo = null;
         this.tamanho = 0;
     }
 
     @Override
     public int search(T item){
         int posicao = 1;
-        for(No<T> atual = this.inicio; atual != null; atual = atual.getProximo()){
+        for(No<T> atual = this.topo; atual != null; atual = atual.getAnterior()){
             if(atual.getElemento().equals(item))
                 return posicao;
             posicao++;
@@ -64,10 +65,10 @@ public class PilhaDinamica<T> implements StackADT<T> {
 
     @Override
     public String toString(){
-        StringBuilder sb = new StringBuilder("[Início] ");
-        for (No atual = this.inicio; atual != null; atual = atual.getProximo()){
+        StringBuilder sb = new StringBuilder("[Topo] ");
+        for (No atual = this.topo; atual != null; atual = atual.getAnterior()){
             sb.append(atual.getElemento());
-            if(atual.getProximo() != null) sb.append(", ");
+            if(atual.getAnterior() != null) sb.append(", ");
         }
         return sb.append(" [Fim]").toString();
     }
