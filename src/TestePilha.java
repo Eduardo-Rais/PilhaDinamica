@@ -14,7 +14,6 @@ public class TestePilha {
         pilha.pop();
         System.out.println(pilha);
         pilha.clear();
-        System.out.println(pilha);
         System.out.println(pilha.search("Jô"));
     }
 }
