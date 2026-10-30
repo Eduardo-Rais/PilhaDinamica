@@ -1,3 +1,5 @@
+package pilha;
+
 public class PilhaDinamica<T> implements StackADT<T> {
     private No<T> topo;
     private int tamanho;

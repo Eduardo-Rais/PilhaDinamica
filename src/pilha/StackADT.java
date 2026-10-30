@@ -1,3 +1,5 @@
+package pilha;
+
 public interface StackADT<T> {
     boolean push(T elemento);
     T pop();
